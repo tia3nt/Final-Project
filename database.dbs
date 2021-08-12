@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="MyDb" id="Project_1b89" database="MySql" >
+	<schema name="gigih_twitt_db" >
+		<table name="tbl_collections" >
+			<column name="collection_id" type="int" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="user_id" type="int" jt="4" mandatory="y" />
+			<column name="collection_timestamp" type="timestamp" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="collection_messages" type="varchar" length="1000" jt="12" />
+			<column name="collection_picture" type="blob" jt="2004" />
+			<column name="collection_video" type="blob" jt="2004" />
+			<column name="collection_file" type="blob" jt="2004" />
+			<column name="collection_flag" type="varchar" length="7" jt="12" />
+			<index name="pk_tbl_collections_id_collections" unique="PRIMARY_KEY" >
+				<column name="collection_id" />
+			</index>
+			<fk name="fk_tbl_collections_tbl_user" to_schema="gigih_twitt_db" to_table="tbl_user" >
+				<fk_column name="user_id" pk="user_id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="tbl_comments" >
+			<column name="comment_id" type="int" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="post_id" type="int" jt="4" />
+			<column name="comment_text" type="varchar" length="1000" jt="12" />
+			<column name="comment_flag" type="varchar" length="7" jt="12" />
+			<column name="user_id" type="int" jt="4" mandatory="y" />
+			<index name="pk_tbl_comments_comment_id" unique="PRIMARY_KEY" >
+				<column name="comment_id" />
+			</index>
+			<fk name="fk_tbl_comments" to_schema="gigih_twitt_db" to_table="tbl_collections" >
+				<fk_column name="post_id" pk="collection_id" />
+			</fk>
+			<fk name="fk_tbl_comments_tbl_user" to_schema="gigih_twitt_db" to_table="tbl_user" >
+				<fk_column name="user_id" pk="user_id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="tbl_hashtag" >
+			<column name="hash_id" type="int" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="post_id" type="int" jt="4" />
+			<column name="comment_id" type="int" jt="4" />
+			<column name="hash_text" type="varchar" length="500" jt="12" />
+			<column name="hash_counter" type="int" jt="4" />
+			<column name="hash_timestamp" type="datetime" jt="93" />
+			<index name="pk_tbl_hashtag_hash_id" unique="PRIMARY_KEY" >
+				<column name="hash_id" />
+			</index>
+			<fk name="fk_tbl_hashtag_tbl_collections" to_schema="gigih_twitt_db" to_table="tbl_collections" >
+				<fk_column name="post_id" pk="collection_id" />
+			</fk>
+			<fk name="fk_tbl_hashtag_tbl_comments" to_schema="gigih_twitt_db" to_table="tbl_comments" >
+				<fk_column name="comment_id" pk="comment_id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="tbl_user" >
+			<column name="user_id" type="int" length="100" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="user_name" type="varchar" length="50" jt="12" mandatory="y" />
+			<column name="user_email" type="varchar" length="50" jt="12" mandatory="y" />
+			<column name="user_password" type="varchar" length="50" jt="12" mandatory="y" />
+			<column name="user_bio" type="date" jt="91" mandatory="y" />
+			<index name="pk_tbl_user_user_id" unique="PRIMARY_KEY" >
+				<column name="user_id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+	</schema>
+	<connector name="MyDb" database="MySql" driver_class="com.mysql.jdbc.Driver" driver_jar="mysql-connector-java-8.0.23.jar" driver_desc="Standard" host="localhost" port="3306" instance="gigih_twitt_db" user="root" passwd="NHprNE40cjQ=" />
+	<layout name="Main Layout" id="Layout_1841" show_relation="columns" >
+		<entity schema="gigih_twitt_db" name="tbl_collections" color="C1D8EE" x="128" y="336" />
+		<entity schema="gigih_twitt_db" name="tbl_comments" color="C1D8EE" x="640" y="160" />
+		<entity schema="gigih_twitt_db" name="tbl_hashtag" color="C1D8EE" x="640" y="368" />
+		<entity schema="gigih_twitt_db" name="tbl_user" color="C1D8EE" x="128" y="144" />
+		<callout x="48" y="48" pointer="Round" >
+			<comment><![CDATA[Create new tables by right-clicking the layout (diagram).
+Create multiple layouts with the same or different tables.
+Saving the model to file will also save the layouts and schema structure.]]></comment>
+		</callout>
+	</layout>
+</project>
