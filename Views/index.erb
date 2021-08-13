@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Gigih Internal </title>
+  </head>
+  <body>
+<%
+    data.each do |list|
+      list.each do |key, value|
+      %>
+        <%= "#{key} : #{value}" %>
+      <% end %>
+      <br>
+    <% end %>
+
+  </body>
+</html>

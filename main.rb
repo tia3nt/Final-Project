@@ -1,11 +1,14 @@
 require 'sinatra'
 require 'mysql2'
-require './Models/dbcon'
-
+require_relative './Models/dbcon'
+require_relative './Controllers/controller_main'
 
 set :bind, 'localhost'
 set :port, '2222'
 
+
+PUBLIC_DIR = File.join(File.dirname(__FILE__), 'static')
+
  get '/' do
-   puts (Db_Conn.query_only('show tables'))
+   Controller_main.show_home
  end

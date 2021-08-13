@@ -21,13 +21,7 @@ RSpec.describe 'MyTwitt' do
             db_conn_mock = double
             allow(Mysql2::Client).to receive(:new).and_return(db_conn_mock)
                 data = Db_Conn.query_only('SHOW TABLES')
-            expect(Mysql2::Result).to be_truthy 
-
-        end
-
-
-
-        it '' do
+            expect(Mysql2::Result).to be_truthy
 
         end
 
@@ -37,7 +31,12 @@ RSpec.describe 'MyTwitt' do
 
   describe 'sinatra running' do
     include Rack::Test::Methods
-    it 'should render the home page' do
+    
+
+    it 'should be abble to handle query and automatically handle rawdata into sinatra previewed-able' do
+      db_conn_mock = double
+      allow(Mysql2::Client).to receive(:new).and_return(db_conn_mock)
+
       get '/'
       expect(last_response).to be_ok
     end

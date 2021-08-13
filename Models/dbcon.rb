@@ -12,4 +12,13 @@ class Db_Conn
   def self.query_only(query_line)
     rawData = @@client.query(query_line)
   end
+
+  def self.query(query_line)
+    rawData = @@client.query(query_line)
+    lists = Array.new
+    rawData.each do |list|
+      lists.push(list)
+    end
+    lists
+  end
 end
