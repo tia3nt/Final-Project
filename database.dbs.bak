@@ -30,9 +30,6 @@
 			<column name="comment_text" type="varchar" length="1000" jt="12" />
 			<column name="comment_flag" type="varchar" length="7" jt="12" />
 			<column name="user_id" type="int" jt="4" mandatory="y" />
-			<column name="comment_timestamp" type="datetime" jt="93" >
-				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
-			</column>
 			<index name="pk_tbl_comments_comment_id" unique="PRIMARY_KEY" >
 				<column name="comment_id" />
 			</index>
