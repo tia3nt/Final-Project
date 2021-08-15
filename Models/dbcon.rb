@@ -12,10 +12,11 @@ class Db_Conn
       :database => 'gigih_twitt_db'
     )
   end
-    @@client = self.connect
+
 
   def self.query_only(query_line)
-    rawData = @@client.query(query_line)
+    client = self.connect
+    rawData = client.query(query_line)
   end
 
   def self.query(query_line)
@@ -48,7 +49,7 @@ class Db_Conn
     end
     data_text=data_text[0..-3]
 
-    @@client.query("
+    self.query_only("
       INSERT INTO #{table}
       (#{column_text})
       VALUES #{data_text}
@@ -63,7 +64,7 @@ class Db_Conn
     end
     condition = condition[0..-5]
 
-    rawData = @@client.query("
+    rawData = self.query_only("
           select * from #{table} where #{condition}")
     check = rawData.count
 
@@ -77,7 +78,11 @@ conditions =""
 length = (operand.size + 2)*-1
     data.each do
       |key, value|
-      conditions << "#{key} = '#{value}' #{operand} "
+      if value.include?("%")
+        conditions << "#{key} LIKE '#{value}' #{operand} "
+      else
+        conditions << "#{key} = '#{value}' #{operand} "
+      end
     end
   conditions = conditions[0..length]
 
@@ -100,6 +105,23 @@ def self.edit(table, new_data, id)
       SET #{toset}
       WHERE #{idset} = #{id}
       ")
+end
+
+
+def self.delete(table, parameter, operand)
+  condition = ""
+  length = (operand.size + 2)* -1
+  parameter.each do |key, value|
+    if value.include?("%")
+        condition << "#{key} LIKE '#{value}' #{operand} "
+      else
+        condition << "#{key} = '#{value}' #{operand} "
+    end
+  end
+  condition = condition[0..length]
+
+  self.query_only("
+    DELETE FROM #{table} WHERE #{condition}")
 end
 
 end

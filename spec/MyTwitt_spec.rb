@@ -78,9 +78,19 @@ RSpec.describe 'MyTwitt' do
             user_id = 25
 
             Db_Mock.as_stubbed_const
-            expect(Db_Conn).to receive(:edit).with(table, new_data, user_id)
+            expect(Db_Mock).to receive(:edit).with(table, new_data, user_id)
             Db_Conn.edit(table, new_data,user_id)
 
+          end
+
+          it 'should be able to delete records of given parameter' do
+            table = 'tbl_user'
+            parameter = {"user_name" => "Vanita Rania", "user_bio" => "1995-03-20"}
+            operand = 'AND'
+            Db_Mock.as_stubbed_const
+            expect(Db_Mock).to receive(:delete).with(table, parameter, operand)
+
+            Db_Conn.delete(table, parameter, operand)
           end
 
           Db_Conn.query_only("Delete from tbl_user")
@@ -94,9 +104,7 @@ RSpec.describe 'MyTwitt' do
     include Rack::Test::Methods
   #
     it 'should be abble to handle query and automatically handle rawdata into sinatra previewed-able' do
-      db_conn_mock = double
-      allow(Mysql2::Client).to receive(:new).and_return(db_conn_mock)
-
+    
       get '/'
       expect(last_response).to be_ok
     end

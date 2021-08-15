@@ -4,7 +4,7 @@ require_relative './Models/dbcon'
 require_relative './Controllers/controller_main'
 
 set :bind, 'localhost'
-set :port, '2222'
+# set :port, '2222'
 
 
 PUBLIC_DIR = File.join(File.dirname(__FILE__), 'static')
