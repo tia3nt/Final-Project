@@ -72,9 +72,14 @@ RSpec.describe 'MyTwitt' do
           expect(num_id.size).to be > 0
           end
 
-          it 'should be able to edit previously inserted data based on its id' do
+          it 'should be able to edit previously inserted data, based on its id' do
+            table = 'tbl_user';
+            new_data = {:user_name => "Sabrina Renata"}
+            user_id = 25
 
-
+            Db_Mock.as_stubbed_const
+            expect(Db_Conn).to receive(:edit).with(table, new_data, user_id)
+            Db_Conn.edit(table, new_data,user_id)
 
           end
 
@@ -98,12 +103,7 @@ RSpec.describe 'MyTwitt' do
 
   end
 
-  # after :all do
-  #   allow(Db_Conn).to receive(:query_only).with("Delete From tbl_user")
-  #   allow(Db_Conn).to receive(:query_only).with("Delete From tbl_collections")
-  #   allow(Db_Conn).to receive(:query_only).with("Delete From tbl_comments")
-  #   allow(Db_Conn).to receive(:query_only).with("Delete From tbl_hashtag")
-  # end
+
 
 end
 

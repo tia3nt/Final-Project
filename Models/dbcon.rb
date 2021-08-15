@@ -1,5 +1,9 @@
 
 class Db_Conn
+  @@idset= {  "tbl_user"=> "user_id",
+              "tbl_collections" => "collection_id",
+              "tbl_comments" => "comment_id",
+              "tbl_hashtag" => "hash_id"}
   def self.connect
     client = Mysql2::Client.new(
       :host => 'localhost',
@@ -67,23 +71,35 @@ class Db_Conn
   end
 
 def self.find_id(table, data, operand)
-idset= {  "tbl_user"=> "user_id",
-          "tbl_collections" => "collection_id",
-          "tbl_comments" => "comment_id",
-          "tbl_hashtag" => "hash_id"}
-idset = idset["#{table}"]
+
+idset = @@idset["#{table}"]
 conditions =""
 length = (operand.size + 2)*-1
-data.each do
-  |key, value|
-  conditions << "#{key} = '#{value}' #{operand} "
-end
+    data.each do
+      |key, value|
+      conditions << "#{key} = '#{value}' #{operand} "
+    end
   conditions = conditions[0..length]
-  puts("select #{idset} from #{table} where #{conditions}")
+
   rawData = self.query_only("
     select #{idset} from #{table} where #{conditions}")
     return rawData.each
 end
 
+def self.edit(table, new_data, id)
+  idset = @@idset["#{table}"]
+  toset= ""
+  new_data.each do
+    |key, value|
+    toset << "#{key} = '#{value}', "
+  end
+  toset = toset[0..-3]
+
+  self.query_only("
+      UPDATE #{table}
+      SET #{toset}
+      WHERE #{idset} = #{id}
+      ")
+end
 
 end
