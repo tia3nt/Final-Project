@@ -110,12 +110,6 @@ RSpec.describe 'MyTwitt' do
         user = User.new(param)
         check = user.valid?
 
-          expect(param["user_email"]).to include("@")
-          expect(param["user_email"]).to include(".")
-
-        expect(param["user_name"]).not_to be_nil
-        expect(param["user_email"]).not_to be_nil
-
         expect(check).to be true
       end
     end
@@ -135,11 +129,3 @@ RSpec.describe 'MyTwitt' do
 
 
 end
-
-
-
-
-# config.mock_with :dbCOnn do | dbMockConn|
-#
-#
-# end

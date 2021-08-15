@@ -9,8 +9,7 @@ class User
   end
 
   def getter(header)
-
-    case header
+  case header
       when "user_id"
         @user_id
       when "user_name"
@@ -26,9 +25,27 @@ class User
     end
   end
 
+def setter(key, value)
+  case key
+      when "user_id"
+        @user_id = value
+      when "user_name"
+        @user_name = value
+      when "user_email"
+        @user_email = value
+      when "user_password"
+        @user_password = value
+      when "user_bio"
+        @user_bio = value
+      when "user_timestamp"
+        @user_timestamp = value
+  end
+end
+
   def valid?
     return false if @user_name.nil?
     return false if @user_email.nil?
+
     if @user_email.match(/\W/)
       return false unless @user_email.include?("@")
       return false unless @user_email.include?(".")
