@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'mysql2'
 require_relative './Models/dbcon'
+require_relative './Models/user'
 require_relative './Controllers/controller_main'
 
 set :bind, 'localhost'

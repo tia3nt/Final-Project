@@ -99,12 +99,33 @@ RSpec.describe 'MyTwitt' do
       end
 
   end
+  describe User do
+    context 'when given input' do
+      it 'should be able to validate input' do
+        param = { "user_name" => "Malika Azzahra",
+                  "user_password" => "malika123",
+                  "user_email" => "malika@gmail.com",
+                  "user_bio" => "2012-01-30"}
+
+        user = User.new(param)
+        check = user.valid?
+
+          expect(param["user_email"]).to include("@")
+          expect(param["user_email"]).to include(".")
+
+        expect(param["user_name"]).not_to be_nil
+        expect(param["user_email"]).not_to be_nil
+
+        expect(check).to be true
+      end
+    end
+  end
 
   describe 'sinatra running' do
     include Rack::Test::Methods
   #
     it 'should be abble to handle query and automatically handle rawdata into sinatra previewed-able' do
-    
+
       get '/'
       expect(last_response).to be_ok
     end
