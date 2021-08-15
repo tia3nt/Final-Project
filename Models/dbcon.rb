@@ -43,7 +43,7 @@ class Db_Conn
       data_text << "), "
     end
     data_text=data_text[0..-3]
-    
+
     @@client.query("
       INSERT INTO #{table}
       (#{column_text})
@@ -65,4 +65,25 @@ class Db_Conn
 
     return check>0
   end
+
+def self.find_id(table, data, operand)
+idset= {  "tbl_user"=> "user_id",
+          "tbl_collections" => "collection_id",
+          "tbl_comments" => "comment_id",
+          "tbl_hashtag" => "hash_id"}
+idset = idset["#{table}"]
+conditions =""
+length = (operand.size + 2)*-1
+data.each do
+  |key, value|
+  conditions << "#{key} = '#{value}' #{operand} "
+end
+  conditions = conditions[0..length]
+  puts("select #{idset} from #{table} where #{conditions}")
+  rawData = self.query_only("
+    select #{idset} from #{table} where #{conditions}")
+    return rawData.each
+end
+
+
 end

@@ -43,6 +43,7 @@ RSpec.describe 'MyTwitt' do
 
           end
 
+
           it 'should be able to detect existing data' do
             table = "tbl_user"
             prev_col = ["user_name", "user_email", "user_password", "user_bio"]
@@ -57,9 +58,27 @@ RSpec.describe 'MyTwitt' do
 
             check = Db_Conn.exist?(table, new_data)
             expect(check).to be_truthy
-            Db_Conn.query_only("Delete from tbl_user")
+
 
           end
+
+          it 'should be able to find id of given parameter' do
+          table = 'tbl_user'
+          data = {:user_email =>"vanita@rania.net", :user_bio => "1995-03-20"}
+          operand = 'AND'
+
+          expect(Db_Conn).to receive(:find_id).with(table, data, operand).and_call_original
+          num_id = Db_Conn.find_id(table, data, operand)
+          expect(num_id.size).to be > 0
+          end
+
+          it 'should be able to edit previously inserted data based on its id' do
+
+
+
+          end
+
+          Db_Conn.query_only("Delete from tbl_user")
         end
 
       end
