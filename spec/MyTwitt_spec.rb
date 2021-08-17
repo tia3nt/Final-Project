@@ -62,6 +62,7 @@ RSpec.describe 'MyTwitt' do
 
           end
 
+
           it 'should be able to find id of given parameter' do
           table = 'tbl_user'
           data = {:user_email =>"vanita@rania.net", :user_bio => "1995-03-20"}
@@ -111,6 +112,34 @@ RSpec.describe 'MyTwitt' do
         check = user.valid?
 
         expect(check).to be true
+      end
+
+      it 'should be able to check duplicate email registration' do
+          new_data= {"user_name" => "Karina Mulia",
+                      "user_email" => "Mwira@gmail.com"}
+
+
+          user= User.new(new_data)
+          message= user.create
+
+          expect(message).to eq("Email has been used, please do login instead")
+      end
+    end
+    context 'when given valid and non duplicate input' do
+      it 'should be able to record inputed data to database' do
+        new_data = {"user_name" => "Teddy Brown",
+                    "user_email" => "teddy@brownland.net",
+                    "user_password" => "teddy123",
+                    "user_bio" => "1990-05-24"}
+        Db_Mock=class_double(Db_Conn).as_stubbed_const
+        allow(Db_Mock).to receive(:exist?).with("tbl_user", {"user_email" => new_data["user_email"]}) {false}
+        expect(Db_Mock).to receive(:create).once
+
+        user = User.new(new_data)
+        message = user.create
+
+        expect(message).to eq("New User has been recorded")
+
       end
     end
   end

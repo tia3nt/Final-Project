@@ -1,28 +1,25 @@
 class User
+
   def initialize(param)
-    @user_id = param["user_id"],
-    @user_name = param["user_name"],
-    @user_email = param["user_email"],
-    @user_password = param["user_password"],
-    @user_bio = param["user_bio"],
+    @user_id = param["user_id"]
+    @user_name = param["user_name"]
+    @user_email = param["user_email"]
+    @user_password = param["user_password"]
+    @user_bio = param["user_bio"]
     @user_timestamp = param["user_timestamp"]
   end
 
   def getter(header)
-  case header
-      when "user_id"
-        @user_id
-      when "user_name"
-        @user_name
-      when "user_email"
-        @user_email
-      when "user_password"
-        @user_password
-      when "user_bio"
-        @user_bio
-      when "user_timestamp"
-        @user_timestamp
-    end
+    data = {
+            "user_id" => @user_id,
+            "user_name" => @user_name,
+            "user_email" => @user_email,
+            "user_password" => @user_password,
+            "user_bio" => @user_bio,
+            "user_timestamp" => @user_timestamp
+          }
+          return data[header]
+
   end
 
 def setter(key, value)
@@ -40,6 +37,7 @@ def setter(key, value)
       when "user_timestamp"
         @user_timestamp = value
   end
+
 end
 
   def valid?
@@ -52,5 +50,26 @@ end
     end
     true
   end
+
+def create
+  return false unless valid?
+  return ("Email has been used, please do login instead") if Db_Conn.exist?("tbl_user",{"user_email" => @user_email})
+
+  data = {"user_id" => @user_id,
+          "user_name" => @user_name,
+          "user_email" => @user_email,
+          "user_password" => @user_password,
+          "user_bio" => @user_bio,
+          "user_timestamp" => @user_timestamp
+        }
+  data.keep_if{| k , v | v}
+  list_data = Array.new
+  header = data.keys
+  list_data << data.values
+
+  Db_Conn.create('tbl_user', header, list_data)
+  message = "New User has been recorded"
+  return message
+end
 
 end

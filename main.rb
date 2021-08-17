@@ -1,12 +1,20 @@
-require 'sinatra'
+ require 'sinatra'
 require 'mysql2'
+require 'fileutils'
+require 'dotenv/load'
 require_relative './Models/dbcon'
 require_relative './Models/user'
+require_relative './Models/collection'
+require_relative './Models/message'
+require_relative './Models/hashtag'
 require_relative './Controllers/controller_main'
-
+require_relative './Controllers/control_user'
+require_relative './Controllers/control_collection'
+require_relative './Controllers/control_message'
+require_relative './Controllers/control_hashtag'
 
 set :bind, 'localhost'
-# set :port, '2222'
+set :port, '2222'
 
 
 PUBLIC_DIR = File.join(File.dirname(__FILE__), 'static')

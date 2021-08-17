@@ -19,6 +19,7 @@ class Db_Conn
     rawData = client.query(query_line)
   end
 
+
   def self.query(query_line)
     rawData = self.query_only(query_line)
     lists = Array.new
@@ -48,7 +49,6 @@ class Db_Conn
       data_text << "), "
     end
     data_text=data_text[0..-3]
-
     self.query_only("
       INSERT INTO #{table}
       (#{column_text})
