@@ -72,4 +72,10 @@ def create
   return message
 end
 
+def edit(data_to_change)
+  return false unless valid?
+  return("User not found") unless Db_Conn.exist?("tbl_user", "user_id" => @user_id)
+  Db_Conn.edit("tbl_user", data_to_change, @user_id)
+  message = "Data has successfully updated"
+end
 end
