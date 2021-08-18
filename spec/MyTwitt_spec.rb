@@ -179,6 +179,14 @@ end
 
           user_data = User.get_by_id(user_id)
           expect(Mysql2::Result).to be_truthy
+      end
+
+      it 'should be able to delete existing data records based on given user_id' do
+        user_id_to_delete = 1
+
+          message = User.delete(user_id_to_delete)
+        expect(Mysql2::Result).to be_truthy
+        expect(message).to eq("User Record has successfully deleted")
 
       end
     end

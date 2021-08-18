@@ -74,13 +74,13 @@ end
 
 def edit(data_to_change)
   return false unless valid?
-  return("User doesn't exist") unless Db_Conn.exist?("tbl_user", "user_id" => @user_id)
+  return("User doesn't exist") unless Db_Conn.exist?("tbl_user", {"user_id" => @user_id})
   Db_Conn.edit("tbl_user", data_to_change, @user_id)
   message = "Data has successfully updated"
 end
 
 def self.get_by_id(user_id)
-  return("User doesn't exist") unless Db_Conn.exist?("tbl_user", "user_id" => @user_id)
+  return("User doesn't exist") unless Db_Conn.exist?("tbl_user", {"user_id" => user_id})
   data = Db_Conn.query_only("SELECT * FROM tbl_user WHERE user_id = #{user_id}")
   data = Db_Conn.data_to_object(data)
 end
@@ -96,7 +96,14 @@ def self.get_id_by_parameter(param)
                       FROM tbl_user
                       WHERE #{conditions}")
   retrieved_data = Db_Conn.data_to_object(rawData)
-  retrieved_data = retrieved_data.values
+
+end
+
+def self.delete(user_id)
+  return false if self.get_by_id(user_id) == "User doesn't exist"
+  Db_Conn.delete('tbl_user', {"user_id"=> user_id}, "")
+  Collection.delete({"user_id" => user_id}) unless Collection.get_id_by_parameter({"user_id" => user_id}).nil?
+  message = "User Record has successfully deleted"
 end
 
 end

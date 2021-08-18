@@ -2,6 +2,7 @@
 require 'mysql2'
 require 'fileutils'
 require 'dotenv/load'
+
 require_relative './Models/Db_Conn'
 require_relative './Models/user'
 require_relative './Models/collection'

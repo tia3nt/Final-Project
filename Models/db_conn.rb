@@ -112,7 +112,7 @@ def self.delete(table, parameter, operand)
   condition = ""
   length = (operand.size + 2)* -1
   parameter.each do |key, value|
-    if value.include?("%")
+    if value.to_s.include?("%")
         condition << "#{key} LIKE '#{value}' #{operand} "
       else
         condition << "#{key} = '#{value}' #{operand} "
