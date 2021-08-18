@@ -74,8 +74,29 @@ end
 
 def edit(data_to_change)
   return false unless valid?
-  return("User not found") unless Db_Conn.exist?("tbl_user", "user_id" => @user_id)
+  return("User doesn't exist") unless Db_Conn.exist?("tbl_user", "user_id" => @user_id)
   Db_Conn.edit("tbl_user", data_to_change, @user_id)
   message = "Data has successfully updated"
 end
+
+def self.get_by_id(user_id)
+  return("User doesn't exist") unless Db_Conn.exist?("tbl_user", "user_id" => @user_id)
+  data = Db_Conn.query_only("SELECT * FROM tbl_user WHERE user_id = #{user_id}")
+  data = Db_Conn.data_to_object(data)
+end
+
+def self.get_id_by_parameter(param)
+  conditions = ""
+  param.each do |key, value|
+    conditions << "#{key} = '#{value}' AND "
+  end
+  conditions = conditions[0..-6]
+  rawData = Db_Conn.query_only("
+                      SELECT user_id
+                      FROM tbl_user
+                      WHERE #{conditions}")
+  retrieved_data = Db_Conn.data_to_object(rawData)
+  retrieved_data = retrieved_data.values
+end
+
 end

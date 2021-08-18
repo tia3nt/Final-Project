@@ -19,15 +19,15 @@ class Db_Conn
     rawData = client.query(query_line)
   end
 
-
-  def self.query(query_line)
-    rawData = self.query_only(query_line)
-    lists = Array.new
-    rawData.each do |list|
-      lists.push(list)
-    end
-    lists
+  def self.data_to_object(rawdata)
+       lists = Array.new
+       rawdata.each do
+         |list|
+         lists << list
+       end
+       lists
   end
+
 
   def self.create(table, col, data)
     column_text = ""

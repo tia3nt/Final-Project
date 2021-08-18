@@ -113,7 +113,7 @@ end
 
         end
       end
-  end
+
 
   describe User do
     context 'when given input' do
@@ -138,7 +138,7 @@ end
 
           expect(message).to eq("Email has been used, please do login instead")
       end
-    end
+
     context 'when given valid and non duplicate input' do
       it 'should be able to record inputed data to database' do
         new_data = {"user_name" => "Teddy Brown",
@@ -173,6 +173,17 @@ end
 
       end
     end
+    context 'when given previously stored data' do
+      it 'should be able to return all instance variable related to user_id' do
+          user_id = 3
+
+          user_data = User.get_by_id(user_id)
+          expect(Mysql2::Result).to be_truthy
+
+      end
+    end
+
+    end
   end
 
 
@@ -188,3 +199,4 @@ end
     end
 
   end
+end
