@@ -248,10 +248,13 @@ end
         collection1 = Collection.new(user_input)
         checker = collection1.hashtag_included?
         expect(checker).to be true
+<<<<<<< HEAD
 
         counter = collection1.hashtag_counter
         expect(counter).to eq(2)
 
+=======
+>>>>>>> 43797be67f7157f58e5d87e95ae193208d488074
       end
     end
   end
