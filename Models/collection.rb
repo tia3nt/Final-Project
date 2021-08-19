@@ -19,6 +19,10 @@ def hashtag_included?
   @collection_messages.include?('#')
 end
 
+def hashtag_counter
+  @collection_messages.count "#"
+end
+
   def self.get_id_by_parameter(param)
     conditions = ""
     param.each do |key, value|
