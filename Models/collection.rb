@@ -1,4 +1,23 @@
 class Collection
+  def initialize(param)
+    @collection_id = param["collection_id"]
+    @collection_messages = param["collection_messages"]
+    @collection_picture = param["collection_picture"]
+    @collection_video = param["collection_video"]
+    @collection_file = param["collection_file"]
+    @collection_flag = param["collection_flag"]
+    @collection_timestamp = param["collection_timestamp"]
+    @user_id = param["user_id"]
+  end
+
+
+def limit_text
+  @collection_messages = @collection_messages[0..999]
+end
+
+def hashtag_included?
+  @collection_messages.include?('#')
+end
 
   def self.get_id_by_parameter(param)
     conditions = ""
@@ -27,9 +46,11 @@ class Collection
       condition = condition[0..-5]
       condition2 = condition.gsub("collection_id","post_id")
       unless condition == ""
-          Db_Conn.query_only("DELETE FROM tbl_collections WHERE #{condition}")
-          Db_Conn.query_only("DELETE FROM tbl_comments WHERE #{condition2}")
-          Db_Conn.query_only("DELETE FROM tbl_hashtag WHERE #{condition2}")
+        table_list = ['tbl_collections', 'tbl_comments', 'tbl_hashtag']
+        condition_list =[condition, condition2, condition2]
+        [0..2].each do |i|
+          Db_Conn.query_only("DELETE FROM #{tbl_list[i]} WHERE #{condition_list[i]}")
+        end
       end
     end
 

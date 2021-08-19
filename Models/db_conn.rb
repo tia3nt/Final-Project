@@ -35,8 +35,8 @@ class Db_Conn
       column_text << list
       column_text << ", "
     end
-    column_text=column_text[0..-3]
 
+    column_text=column_text[0..-3]
     data_text = ""
     data.each do |lists|
       data_text << "("

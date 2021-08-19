@@ -194,15 +194,72 @@ end
     end
   end
 
+  describe Collection do
+    context 'when user post collections of their thought' do
+      it 'should limitate text length into 1000 characters only' do
+        collection_messages =
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Maecenas ipsum enim, maximus nec molestie ut, fermentum sed augue.
+              Sed porta elementum varius. Sed sit amet aliquam justo.
+              Donec ut scelerisque elit. Fusce nisl magna, rutrum sit amet ornare
+              id, bibendum vitae magna. Nullam eget finibus turpis. Sed faucibus
+              hendrerit leo nec cursus. Integer at augue vel ex porttitor feugiat.
+              In nulla magna, pretium eleifend nunc vitae, congue consequat justo.
+              Ut et ultrices magna. Quisque purus quam, ullamcorper ac eros id,
+              malesuada hendrerit velit. Curabitur sed finibus magna. Aenean sit
+               amet condimentum ipsum. Praesent dui enim, feugiat quis quam ac,
+               volutpat tristique augue.
 
+              Aenean ornare tellus augue, nec sollicitudin ante mattis nec.
+              Phasellus sollicitudin, mauris sit amet tempor lacinia, libero
+              sapien dignissim massa, id sollicitudin purus enim non velit.
+              Etiam eu fermentum mi. Phasellus aliquet leo tincidunt massa
+              tincidunt, quis ullamcorper lacus dapibus. Cras placerat mi
+              elementum luctus ultricies. Quisque aliquet iaculis turpis at
+              hendrerit. Sed ultrices dolor vitae sem rhoncus, nec semper quam
+              sollicitudin. Proin sed sem at augue sagittis hendrerit vel in
+              purus. Donec aliquam ipsum ac semper malesuada. Nunc non consectetur
+              dolor. In at porta diam, vitae facilisis risus."
+
+        user_input = {"collection_messages" => collection_messages}
+
+              collection1 = Collection.new(user_input)
+              message = collection1.limit_text
+              expect(message.length).to be <= 1000
+
+      end
+      it 'should be able to detect hashtags and record it' do
+        collection_messages =
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Maecenas ipsum enim, maximus nec molestie ut, fermentum sed augue.
+        Sed porta #elementum varius. Sed sit amet aliquam justo.
+        Donec ut scelerisque elit. Fusce nisl magna, rutrum sit amet ornare
+        id, bibendum vitae magna. Nullam eget finibus turpis. Sed faucibus
+        hendrerit leo nec cursus. Integer at augue vel ex #PorttitorFeugiat.
+        In nulla magna, pretium eleifend nunc vitae, congue consequat justo.
+        Ut et ultrices magna. Quisque purus quam, ullamcorper ac eros id,
+        malesuada hendrerit velit. Curabitur sed finibus magna. Aenean sit
+         amet condimentum ipsum. Praesent dui enim, feugiat quis quam ac,
+         volutpat tristique augue."
+
+         user_input = {"collection_messages" => collection_messages,
+                        "user_id" => 1}
+
+        collection1 = Collection.new(user_input)
+        checker = collection1.hashtag_included?
+        expect(checker).to be true
+      end
+    end
+  end
 
   describe 'sinatra running' do
     include Rack::Test::Methods
 
-    xit 'should be abble to handle query and automatically handle rawdata into sinatra previewed-able' do
+    it 'should be abble to handle query and automatically handle rawdata into sinatra previewed-able' do
 
       get '/'
       expect(last_response).to be_ok
+      expect(Mysql2::Result).to be_truthy
 
     end
 
