@@ -1,19 +1,15 @@
 require_relative "spec_helper"
 require_relative "../main.rb"
+
 require_relative "test_helper"
 require 'rack/test'
 
-
-
-
 set :environment, :test
-
+include Rack::Test::Methods
 
 def app
     Sinatra::Application
 end
-
-
 
 RSpec.describe 'MyTwitt' do
 
@@ -30,7 +26,6 @@ before :all do
   Db_Conn.query_only("SET FOREIGN_KEY_CHECKS = 1")
 end
 
-
   describe Db_Conn do
       context 'When real database accept queries' do
 
@@ -40,10 +35,8 @@ end
         end
 
         it 'mocks database should be abble to take over on test' do
-
             expect(Db_Mock).to receive(:query).once
             Db_Conn.query_only('Show tables')
-
         end
 
         context 'When given valid input' do
@@ -54,14 +47,13 @@ end
                             ["Meriam Wiranata", "Mwira@gmail.com", "pass2", "2000-01-23"]]
 
             expect(Db_Mock).to receive(:query).once
+            Db_Conn.create(table, table_columns, table_values)
 
-              Db_Conn.create(table, table_columns, table_values)
-
-              expect(Mysql2::Result).to be_truthy
-
+            expect(Mysql2::Result).to be_truthy
           end
         end
       end
+
       context "When sequential data record is needed, real database should take place" do
           it 'should be able to detect existing data' do
             table = "tbl_user"
@@ -75,9 +67,7 @@ end
 
             check = Db_Conn.exist?(table, new_data)
             expect(check).to be_truthy
-
           end
-
 
           it 'should be able to find id of given parameter' do
             table = 'tbl_user'
@@ -95,7 +85,6 @@ end
 
             Db_Conn.edit(table, new_data,user_id)
             expect(Mysql2::Result).to be_truthy
-
           end
 
           it 'should be able to delete records of given parameter' do
@@ -117,12 +106,12 @@ end
 
   describe User do
     context 'when given input' do
+
       it 'should be able to validate input' do
         param = { "user_name" => "Malika Azzahra",
                   "user_password" => "malika123",
                   "user_email" => "malika@gmail.com",
                   "user_bio" => "2012-01-30"}
-
         user = User.new(param)
         check = user.valid?
 
@@ -132,7 +121,6 @@ end
       it 'should be able to check duplicate email registration' do
           new_data= {"user_name" => "Karina Mulia",
                       "user_email" => "Mwira@gmail.com"}
-
           user= User.new(new_data)
           message= user.create
 
@@ -145,13 +133,11 @@ end
                     "user_email" => "teddy@brownland.net",
                     "user_password" => "teddy123",
                     "user_bio" => "1990-05-24"}
-
         user = User.new(new_data)
         message = user.create
 
         expect(message).to eq("New User has been recorded")
         expect(Mysql2::Result).to be_truthy
-
       end
 
       it 'should be able to update changes directed by user_id' do
@@ -165,29 +151,26 @@ end
         data_to_change = {"user_name" => "Hamid Wiranata",
                           "user_password" => "test123"}
         user_id = 2
-
         user = User.new(old_record)
         message = user.edit(data_to_change)
         expect(Mysql2::Result).to be_truthy
         expect(message).to eq("Data has successfully updated")
-
       end
     end
+
     context 'when given previously stored data' do
+
       it 'should be able to return all instance variable related to user_id' do
           user_id = 3
-
           user_data = User.get_by_id(user_id)
           expect(Mysql2::Result).to be_truthy
       end
 
       it 'should be able to delete existing data records based on given user_id' do
         user_id_to_delete = 1
-
-          message = User.delete(user_id_to_delete)
+        message = User.delete(user_id_to_delete)
         expect(Mysql2::Result).to be_truthy
         expect(message).to eq("User Record has successfully deleted")
-
       end
     end
 
@@ -196,6 +179,7 @@ end
 
   describe Collection do
     context 'when user post collections of their thought' do
+
       it 'should limitate text length into 1000 characters only' do
         collection_messages =
               "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -222,15 +206,15 @@ end
               dolor. In at porta diam, vitae facilisis risus."
 
         user_input = {"collection_messages" => collection_messages}
-
-              collection1 = Collection.new(user_input)
-              message = collection1.limit_text
-              expect(message.length).to be <= 1000
+        collection1 = Collection.new(user_input)
+        message = collection1.limit_text
+        expect(message.length).to be <= 1000
 
       end
+
       it 'should be able to detect hashtags and record it' do
         collection_messages =
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        "#Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         Maecenas ipsum enim, maximus nec molestie ut, fermentum sed augue.
         Sed porta #elementum varius. Sed sit amet aliquam justo.
         Donec ut scelerisque elit. Fusce nisl magna, rutrum sit amet ornare
@@ -244,31 +228,93 @@ end
 
          user_input = {"collection_messages" => collection_messages,
                         "user_id" => 1}
-
         collection1 = Collection.new(user_input)
         checker = collection1.hashtag_included?
         expect(checker).to be true
-<<<<<<< HEAD
 
         counter = collection1.hashtag_counter
-        expect(counter).to eq(2)
+        expect(counter).to eq(3)
 
-=======
->>>>>>> 43797be67f7157f58e5d87e95ae193208d488074
+        hashtag_found = collection1.hashtag_detected_records
+        expect(hashtag_found).to eq(['#Lorem', '#elementum', '#PorttitorFeugiat'])
+      end
+
+      xit 'should be able to upload a picture files' do
+        file_path_to_upload =
+        "G:\test\mySites\images\444-4446616_page-under-construction-ui-ux-design-illustration-hd.png"
+        file_name_uploaded = "444-4446616_page-under-construction-ui-ux-design-illustration-hd.png"
+        new_collection = {
+          "user_id" => 1,
+          "collection_messages" => "This collection only contain an image",
+          "collection_picture" => file_path_to_upload
+        }
+
+        collection1 = Picture_Gallery.new(new_collection)
+        collection1.upload
+        expect(File).to receive(:exist?).with("/upload/picture/#{file_name_uploaded}").and_return be_truthy
+      end
+
+      xit 'should be able to upload a video files' do
+
+      end
+
+      xit 'should be able to upload a files' do
+
+      end
+
+      xit 'should be able to create new collections records' do
+        new_message = "Hello #DuniaTanpaBatas"
+        new_image = ''
+      end
+
+      xit 'should be able to view uploaded gallery collection' do
+
+      end
+
+
+    end
+
+  end
+  describe Hashtag do
+    context 'when a user create a collection messages, that contain some hashtags' do
+      it 'should be able to detect previously recorded existance' do
+        Db_Conn.query_only("DELETE FROM tbl_hashtag")
+        Db_Conn.query_only("ALTER TABLE tbl_hashtag AUTO_INCREMENT = 1")
+
+        check = Hashtag.hash_collection_exist?(1,'#Lorem')
+        expect(check).to be false
+      end
+      xit 'should be recorded onto hashtag tables, with its related collection id' do
+        collection_id = 1
+        hashtag_lists = ['#Lorem', '#elementum', '#PorttitorFeugiat']
+        collection_timestamp =
+        Hashtag.post_collection(collection_id, hashtag_lists, collection_timestamp)
+        expect(Mysql2::Client).to receive(:query).thrice
       end
     end
   end
 
   describe 'sinatra running' do
-    include Rack::Test::Methods
 
-    it 'should be abble to handle query and automatically handle rawdata into sinatra previewed-able' do
 
+    xit 'should be able to render an erb file' do
       get '/'
       expect(last_response).to be_ok
-      expect(Mysql2::Result).to be_truthy
-
     end
+
+    context 'when user first use/start session on the application' do
+      xit 'should be able to signup new user' do
+
+         # @request.session[:message] = "Start new session"
+        sinatra_flag = 'start'
+        get '/'
+
+        required = ERB.new(File.read("../views/login.erb"))
+        required.result(binding)
+        expect(Controller_main.show_home).to respond_to(required)
+      end
+    end
+
 
   end
 end

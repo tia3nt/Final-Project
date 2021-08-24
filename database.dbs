@@ -13,7 +13,6 @@
 			<column name="collection_picture" type="blob" jt="2004" />
 			<column name="collection_video" type="blob" jt="2004" />
 			<column name="collection_file" type="blob" jt="2004" />
-			<column name="collection_flag" type="varchar" length="7" jt="12" />
 			<index name="pk_tbl_collections_id_collections" unique="PRIMARY_KEY" >
 				<column name="collection_id" />
 			</index>
@@ -51,7 +50,6 @@
 			<column name="post_id" type="int" jt="4" />
 			<column name="comment_id" type="int" jt="4" />
 			<column name="hash_text" type="varchar" length="500" jt="12" />
-			<column name="hash_counter" type="int" jt="4" />
 			<column name="hash_timestamp" type="datetime" jt="93" />
 			<index name="pk_tbl_hashtag_hash_id" unique="PRIMARY_KEY" >
 				<column name="hash_id" />

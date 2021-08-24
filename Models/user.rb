@@ -66,7 +66,7 @@ def create
   list_data = Array.new
   header = data.keys
   list_data << data.values
-
+  
   Db_Conn.create('tbl_user', header, list_data)
   message = "New User has been recorded"
   return message

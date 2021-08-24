@@ -1,7 +1,9 @@
- require 'sinatra'
+require 'sinatra'
 require 'mysql2'
 require 'fileutils'
 require 'dotenv/load'
+require 'down'
+require 'sinatra/contrib'
 
 require_relative './Models/Db_Conn'
 require_relative './Models/user'
@@ -13,13 +15,24 @@ require_relative './Controllers/control_user'
 require_relative './Controllers/control_collection'
 require_relative './Controllers/control_comment'
 require_relative './Controllers/control_hashtag'
+require_relative './Controllers/gallery'
+require_relative './Controllers/picture_gallery'
+require_relative './Controllers/video_gallery'
 
-set :bind, 'localhost'
+# set :bind, '34.101.100.243'
 set :port, '2222'
-
+# enable :sessions
+# set :sessions, :domain => 'gigih.com', :expire_after => 2500000
+# set :session_store, Rack::Session::Pool
 
 PUBLIC_DIR = File.join(File.dirname(__FILE__), 'static')
 
+sinatra_flag = 'start'
+
  get '/' do
-   Controller_main.show_home
+   redirect '/login' if sinatra_flag = 'start'
+ end
+
+ get '/login' do
+   Controller_main.show_login
  end

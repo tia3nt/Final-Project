@@ -9,7 +9,7 @@ class Db_Conn
       :host => 'localhost',
       :username => ENV['DB_Username'],
       :password => ENV['DB_Password'],
-      :database => 'gigih_twitt_db'
+      :database => ENV['DB_Final']
     )
   end
 
@@ -29,9 +29,10 @@ class Db_Conn
   end
 
 
-  def self.create(table, col, data)
+  def self.create(table, header, data)
+
     column_text = ""
-    col.each do |list|
+    header.each do |list|
       column_text << list
       column_text << ", "
     end
