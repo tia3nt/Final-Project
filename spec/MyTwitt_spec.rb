@@ -297,6 +297,20 @@ end
         get '/signup'
         expect(last_response).to be_ok
       end
+      it 'should be able to register new user' do
+        params = {
+          "user_name" => "Cinderella",
+          "user_email"=> "cinder@ela.com",
+          "user_password" => "upikabu123",
+          "password_verify" => "upikabu123",
+          "user_bio" => "1950-01-27"}
+
+        post '/signup'
+        user = User.new(params)
+        user.create
+        expect(last_response).to be_ok
+        expect(Mysql2::Result).to be_truthy
+      end
     end
 
 

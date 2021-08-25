@@ -32,3 +32,10 @@ sinatra_flag = 'start'
  get '/signup' do
    Controller_main.showERB('signup.erb')
  end
+
+ post '/signup' do
+   active_user = Control_user.new(params)
+   active_user.signup
+   content_type :json
+   Db_Conn.query_only("select * from tbl_user").to_json
+ end
