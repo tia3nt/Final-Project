@@ -39,3 +39,7 @@ sinatra_flag = 'start'
    content_type :json
    Db_Conn.query_only("select * from tbl_user").to_json
  end
+
+ get '/login' do
+   Controller_main.showERB('login.erb')
+ end

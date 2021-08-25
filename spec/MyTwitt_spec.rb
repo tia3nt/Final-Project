@@ -311,6 +311,12 @@ end
         expect(last_response).to be_ok
         expect(Mysql2::Result).to be_truthy
       end
+
+      it 'should be able to show login screen' do
+        get '/login'
+        expect(last_response).to be_ok
+      end
+
     end
 
 
