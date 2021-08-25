@@ -1,5 +1,5 @@
 require_relative "spec_helper"
-require_relative "../main.rb"
+require_relative "../app.rb"
 
 require_relative "test_helper"
 require 'rack/test'
@@ -240,18 +240,15 @@ end
       end
 
       xit 'should be able to upload a picture files' do
-        file_path_to_upload =
-        "G:\test\mySites\images\444-4446616_page-under-construction-ui-ux-design-illustration-hd.png"
-        file_name_uploaded = "444-4446616_page-under-construction-ui-ux-design-illustration-hd.png"
-        new_collection = {
-          "user_id" => 1,
-          "collection_messages" => "This collection only contain an image",
-          "collection_picture" => file_path_to_upload
-        }
+        params = {collection_picture: {filename: "Screenshot_2.png",
+          type: "image/png", name: "collection_picture",
+          tempfile: "#<Tempfile:C:/Users/Eka/AppData/Local/Temp/RackMultipart20210825-11304-13jpafn.png>",
+          head: "Content-Disposition: form-data; name=\"collection_picture\";
+          filename=\"Screenshot_2.png\"\r\nContent-Type: image/png\r\n"}}
 
-        collection1 = Picture_Gallery.new(new_collection)
-        collection1.upload
-        expect(File).to receive(:exist?).with("/upload/picture/#{file_name_uploaded}").and_return be_truthy
+        collection1 = Picture_Gallery.new(params)
+        picture_gallery_path = collection1.upload
+        expect(picture_gallery_path).to eq("/upload/picture/Screenshot_2.png")
       end
 
       xit 'should be able to upload a video files' do
@@ -287,7 +284,7 @@ end
       xit 'should be recorded onto hashtag tables, with its related collection id' do
         collection_id = 1
         hashtag_lists = ['#Lorem', '#elementum', '#PorttitorFeugiat']
-        collection_timestamp =
+        collection_timestamp = Time.now.getutc
         Hashtag.post_collection(collection_id, hashtag_lists, collection_timestamp)
         expect(Mysql2::Client).to receive(:query).thrice
       end
@@ -295,23 +292,10 @@ end
   end
 
   describe 'sinatra running' do
-
-
-    xit 'should be able to render an erb file' do
-      get '/'
-      expect(last_response).to be_ok
-    end
-
     context 'when user first use/start session on the application' do
-      xit 'should be able to signup new user' do
-
-         # @request.session[:message] = "Start new session"
-        sinatra_flag = 'start'
-        get '/'
-
-        required = ERB.new(File.read("../views/login.erb"))
-        required.result(binding)
-        expect(Controller_main.show_home).to respond_to(required)
+      it 'should be able to show signup new user page' do
+        get '/signup'
+        expect(last_response).to be_ok
       end
     end
 

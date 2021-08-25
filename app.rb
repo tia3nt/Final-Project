@@ -29,10 +29,6 @@ PUBLIC_DIR = File.join(File.dirname(__FILE__), 'static')
 
 sinatra_flag = 'start'
 
- get '/' do
-   redirect '/login' if sinatra_flag = 'start'
- end
-
- get '/login' do
-   Controller_main.show_login
+ get '/signup' do
+   Controller_main.showERB('signup.erb')
  end

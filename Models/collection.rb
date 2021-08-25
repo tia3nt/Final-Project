@@ -52,7 +52,6 @@ def self.file_gallery_setter(filepath)
   @collection_file = filepath
 end
 
-
 def self.create
 
   table = 'tbl_collections'
@@ -72,6 +71,7 @@ def self.create
   Db_Conn.create(table, header, data)
   Hashtag.post_collection(@collection_id, @@hashtag_lists, @collection_timestamp)
 end
+
   def self.get_id_by_parameter(param)
     conditions = ""
     param.each do |key, value|
