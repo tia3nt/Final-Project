@@ -11,7 +11,6 @@ class Collection
     @user_id = param["user_id"]
   end
 
-
 def limit_text
   @collection_messages = @collection_messages[0..999]
 end
@@ -84,8 +83,22 @@ end
       FROM tbl_collections
       WHERE #{conditions}
       ")
+      return false if rawData.each.empty?
   retrieved_array = Db_Conn.data_to_object(rawData)
+  retrieved_array = retrieved_array[0]
+  collection_id = retrieved_array["collection_id"]
 
+  end
+
+  def self.get_by_id(collection_id)
+    return("No such collection on post") unless Db_Conn.exist?("tbl_collections",
+      {"collection_id" => collection_id})
+
+    data = Db_Conn.query_only("
+      SELECT * FROM tbl_collections
+      WHERE collection_id = #{collection_id}")
+    data = Db_Conn.data_to_object(data)
+    data[0]
   end
 
   def self.delete(param)

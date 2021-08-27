@@ -317,6 +317,16 @@ end
         expect(last_response).to be_ok
       end
 
+      it 'available user should be able to login' do
+        params = {
+          "user_email" => "MWira@gmail.com",
+          "user_password" => "test123"
+        }
+        user_id = User.get_id_by_parameter(params)
+        post '/login'
+        expect(last_response).to be_redirect
+      end
+
     end
 
 

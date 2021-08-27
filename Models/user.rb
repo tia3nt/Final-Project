@@ -83,6 +83,7 @@ def self.get_by_id(user_id)
   return("User doesn't exist") unless Db_Conn.exist?("tbl_user", {"user_id" => user_id})
   data = Db_Conn.query_only("SELECT * FROM tbl_user WHERE user_id = #{user_id}")
   data = Db_Conn.data_to_object(data)
+  data[0]
 end
 
 def self.get_id_by_parameter(param)
@@ -95,14 +96,16 @@ def self.get_id_by_parameter(param)
                       SELECT user_id
                       FROM tbl_user
                       WHERE #{conditions}")
+  return false if rawData.each.empty?
   retrieved_data = Db_Conn.data_to_object(rawData)
-
+  retrieved_data = retrieved_data[0]
+  user_id = retrieved_data["user_id"]
 end
 
 def self.delete(user_id)
   return false if self.get_by_id(user_id) == "User doesn't exist"
   Db_Conn.delete('tbl_user', {"user_id"=> user_id}, "")
-  Collection.delete({"user_id" => user_id}) unless Collection.get_id_by_parameter({"user_id" => user_id}).nil?
+  Collection.delete({"user_id" => user_id}) unless Collection.get_id_by_parameter({"user_id" => user_id}) == false
   message = "User Record has successfully deleted"
 end
 

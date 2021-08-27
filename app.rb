@@ -2,8 +2,8 @@ require 'sinatra'
 require 'mysql2'
 require 'fileutils'
 require 'dotenv/load'
-require 'down'
-require 'sinatra/contrib'
+require 'json'
+require 'pp'
 
 require_relative './Models/Db_Conn'
 require_relative './Models/user'
@@ -43,3 +43,25 @@ sinatra_flag = 'start'
  get '/login' do
    Controller_main.showERB('login.erb')
  end
+
+ post '/login' do
+   input_user = {
+     "user_email" => params["user_email"],
+     "user_password" => params["user_password"]
+   }
+   user_id = User.get_id_by_parameter(input_user)
+   active_user = User.get_by_id(user_id)
+   active_user = User.new(active_user)
+   return false unless active_user.getter("user_password") == params["user_password"]
+   # data_active_user.to_json
+   # content_type :json
+   redirect "/user/:#{user_id}"
+ end
+ #
+ # get '/:id?' do
+ #
+ # end
+ #
+ # post "/collection/:user_id" do
+ #    active_user = User.get_by_id(params["user_id"])
+ # end
