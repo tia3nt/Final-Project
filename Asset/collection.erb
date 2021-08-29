@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>  Gigih Twitt  Collections </title>
+  </head>
+  <body>
+<div class="navigation">
+
+</div>
+<div class="user_page">
+  <div class="title">
+
+<% message_counter = 0 %>
+  </div>
+  <div class="new collection">
+    <form class="new_collection" action="/create/collection" method="post">
+      <textarea id="text_message" name="collection_messages"
+      placeholder="Share your thought here"
+      rows="8" cols="80"
+      onkeyup="<% message_counter += 1 %>"
+      onkeydown=""
+      maxlength="1000" > New Collections
+    </textarea><br><br>
+      <label for="collection_messages"> <%= 1000 - message_counter %> characters left </label>
+
+    <form class="collect_galery"
+        enctype='multipart/form-data'
+        action="/upload/galery/"
+        method="post">
+        <input type="file" name="collection_picture" value="">
+        <input type="file" name="collection_video" value="">
+        <input type="file" name="collection_file" value="">
+        <button type="button" name="bt_add_galery">Add Galery</button>
+    </form>
+
+    <input type="image" name="collection_flag" value="">
+    <button type="submit" name="bt_submit">Post me</button>
+  </form>
+
+  </div>
+  <div class="list_of collection">
+
+  </div>
+</div>
+<div class="hashtags">
+<form class="Trend" action="index.html" method="post">
+  <input type="search" name="hash_to_find"
+  placeholder="Which hashtags are You interest in" value="">
+</form>
+</div>
+  </body>
+</html>

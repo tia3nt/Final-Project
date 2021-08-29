@@ -20,7 +20,7 @@ class Comment
     comment_id = retrieved_data["comment_id"]
   end
   def self.get_by_id(comment_id)
-    return("Comment doesn't exist") unless Db_Conn.exist?("tbl_comments", {"comment_id" => comment_id})
+    return("Comment doesn't exist") unless Db_Conn.exist?("tbl_comments", {"comment_id" => "#{comment_id}"})
     data = Db_Conn.query_only("SELECT * FROM tbl_comments WHERE comment_id = #{comment_id}")
     data = Db_Conn.data_to_object(data)
     data[0]

@@ -7,8 +7,9 @@ class Hashtag
   end
   def self.post_collection(collection_id, hashtag_lists, timestamp)
     table = 'tbl_hashtag'
+    timestamp = timestamp.to_datetime
     header = ['post_id', 'hash_text', 'hash_timestamp']
-
+    return false if hashtag_lists.nil?
     hashtag_lists.uniq.each do |list|
       data = [["#{collection_id}","#{list}","#{timestamp}"]]
       return false if self.hash_collection_exist?(collection_id, list)
@@ -36,7 +37,7 @@ class Hashtag
     hash_id = retrieved_data["hash_id"]
   end
   def self.get_by_id(hash_id)
-    return("No such hashtag") unless Db_Conn.exist?("tbl_hashtag", {"hash_id" => user_id})
+    return("No such hashtag") unless Db_Conn.exist?("tbl_hashtag", {"hash_id" => "#{hash_id}"})
     data = Db_Conn.query_only("SELECT * FROM tbl_hashtag WHERE hash_id = #{hash_id}")
     data = Db_Conn.data_to_object(data)
     data[0]

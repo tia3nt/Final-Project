@@ -6,15 +6,13 @@
   </head>
   <body>
 
+    <div class="user">
+      <h1>User Basic Information</h1>
+      <ul>
+        <li> User Name     : <%= active_user["user_name"] %> </li>
+        <li> Date of Birth : <%= active_user["user_bio"] %> </li>
+      </ul>
 
-<%
-    data.each do |list|
-      list.each do |key, value|
-      %>
-        <%= "#{key} : #{value}" %>
-      <% end %>
-      <br>
-    <% end %>
-
+    </div>
   </body>
 </html>

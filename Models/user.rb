@@ -80,7 +80,7 @@ def edit(data_to_change)
 end
 
 def self.get_by_id(user_id)
-  return("User doesn't exist") unless Db_Conn.exist?("tbl_user", {"user_id" => user_id})
+  return("User doesn't exist") unless Db_Conn.exist?("tbl_user", {"user_id" => "#{user_id}"})
   data = Db_Conn.query_only("SELECT * FROM tbl_user WHERE user_id = #{user_id}")
   data = Db_Conn.data_to_object(data)
   data[0]
@@ -101,7 +101,18 @@ def self.get_id_by_parameter(param)
   retrieved_data = retrieved_data[0]
   user_id = retrieved_data["user_id"]
 end
-
+def self.get_id_by_name_like(name)
+  rawData = Db_Conn.query_only("
+    SELECT user_id from tbl_user
+    WHERE user_name like '%#{name}%'
+    ")
+    return false if rawData.each.nil?
+  id_list = Array.new
+  rawData.each do |list|
+    id_list << list["user_id"]
+  end
+  id_list
+end
 def self.delete(user_id)
   return false if self.get_by_id(user_id) == "User doesn't exist"
   Db_Conn.delete('tbl_user', {"user_id"=> user_id}, "")

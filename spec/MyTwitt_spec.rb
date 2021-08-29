@@ -9,7 +9,9 @@ include Rack::Test::Methods
 
 def app
     Sinatra::Application
+    App
 end
+
 
 RSpec.describe 'MyTwitt' do
 
@@ -209,7 +211,6 @@ end
         collection1 = Collection.new(user_input)
         message = collection1.limit_text
         expect(message.length).to be <= 1000
-
       end
 
       it 'should be able to detect hashtags and record it' do
@@ -325,8 +326,36 @@ end
         user_id = User.get_id_by_parameter(params)
         post '/login'
         expect(last_response).to be_redirect
+        follow_redirect!
+        expect(last_request.url).to include("http://example.org/user/")
       end
-
+    end
+    context 'When dedicated user has been choose' do
+      it 'should be able to render main page with all information connected
+          to the dedicated user' do
+          get "/user/2"
+          active_user = User.get_by_id(2)
+          active_user = User.new(active_user)
+          user_collections_list = Collection.belong_to(2)
+          expect(last_response).to be_ok
+        end
+        it 'should be able to post new collection' do
+          post "/new/collection/user/2"
+          params = {
+            "user_id" => "2",
+            "collection_messages" => "Its #GenerasiGigih final project"
+          }
+          data_input = Collection.new(params)
+          result = data_input.create
+          expect(Mysql2::Result).to be_truthy
+        end
+        it 'should let a user to find other users post collection' do
+          get "/find/user/search?name=cinderella"
+          key = "user_name"
+          value = "cinderella"
+          User.get_id_by_name_like(value)
+          expect(last_response).to be_ok
+        end
     end
 
 
