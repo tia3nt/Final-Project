@@ -100,4 +100,28 @@ post "/post/comment/user/:user_id/collection/:collection_id" do
   records = new_data.create
   records.to_json
 end
+
+get "/find/hashtag/:text" do
+  content_type :json
+  text_to_find = params["text"].downcase
+  result = Hashtag.find(text_to_find)
+  result.to_json
+end
+
+get "/hashtags/trending" do
+  content_type :json
+  result = Hashtag.topfive
+  result.to_json
+end
+
+post "/attach/collection/picture/:collection_id" do
+  content_type :json
+  content_type :multipart/form-data
+  collection = Collection.get_by_id(params["collection_id"])
+  picture_collection = Picture_Gallery.new(params)
+  file_path = picture_collection.upload
+  Collection.picture_gallery_setter(file_path)
+end
+
+
 end

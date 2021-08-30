@@ -101,10 +101,8 @@ end
             Db_Conn.delete(table, parameter, operand)
             expect(Mysql2::Result).to be_truthy
           end
-
         end
       end
-
 
   describe User do
     context 'when given input' do
@@ -243,7 +241,7 @@ end
       xit 'should be able to upload a picture files' do
         params = {collection_picture: {filename: "Screenshot_2.png",
           type: "image/png", name: "collection_picture",
-          tempfile: "#<Tempfile:C:/Users/Eka/AppData/Local/Temp/RackMultipart20210825-11304-13jpafn.png>",
+          tempfile: "#<Tempfile:G:\finalProject\Final-Project\Public\Temp\RackMultipart20210825-11304-13jpafn.png>",
           head: "Content-Disposition: form-data; name=\"collection_picture\";
           filename=\"Screenshot_2.png\"\r\nContent-Type: image/png\r\n"}}
 
@@ -366,6 +364,21 @@ end
           new_comment.limit
           post_comment = new_comment.create
           expect(Mysql2::Result).to be_truthy
+        end
+        it 'should let a user to search certain hashtag' do
+          get "/find/hashtag/Gigih"
+          result = Hashtag.find("Gigih")
+          expect(result).not_to be_nil
+          expect(last_response).to be_ok
+        end
+        it 'should show a message when search text not found' do
+          get "/find/hashtag/SkyWalker"
+          result = Hashtag.find("SkyWalker")
+          expect(result).to eq []
+        end
+        it 'should be able to list top 5 trending hashtags' do
+          get "/hashtags/trending"
+          result = Hashtag.topfive
           expect(last_response).to be_ok
         end
     end

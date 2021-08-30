@@ -1,10 +1,10 @@
 class Hashtag
-  def initialize(param)
-    @post_id = param["post_id"]
-    @comment_id = param["comment_id"]
-    @hash_text = param["hash_text"]
-    @hash_timestamp = param["hash_timestamp"]
-  end
+  # def initialize(param)
+  #   @post_id = param["post_id"]
+  #   @comment_id = param["comment_id"]
+  #   @hash_text = param["hash_text"]
+  #   @hash_timestamp = param["hash_timestamp"]
+  # end
   def self.post_collection(collection_id, hashtag_lists, timestamp)
     table = 'tbl_hashtag'
     timestamp = timestamp.to_datetime
@@ -58,5 +58,28 @@ class Hashtag
       SELECT * FROM tbl_hashtag WHERE comment_id = '#{comment_id}'
       AND LOWER(hash_text) = '#{data.downcase!}'")
     data_checker.each.nil?
+  end
+  def self.find(text)
+    text = "%#{text.downcase}%"
+    rawData = Db_Conn.query_only("
+      SELECT hash_text AS hashtags,
+      hash_timestamp AS date,
+      post_id AS 'from collection post',
+      comment_id AS 'from comments'
+      FROM tbl_hashtag
+      WHERE lower(hash_text) like '#{text}'")
+    return ("There is no such hashtag") if rawData.each.nil?
+    found_list = Db_Conn.data_to_object(rawData)
+  end
+  def self.topfive
+    rawData = Db_Conn.query_only("
+      SELECT count(lower(hash_text)) as counter,
+      hash_text
+      From tbl_hashtag
+      WHERE TIMESTAMPDIFF(hour, curdate(), hash_timestamp)<=24
+      GROUP BY LOWER(hash_text)
+      ORDER BY counter DESC LIMIT 5")
+      return ("There is no hashtags registered for today") if rawData.each.nil?
+      found_list = Db_Conn.data_to_object(rawData)
   end
 end

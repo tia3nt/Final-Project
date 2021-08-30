@@ -1,7 +1,7 @@
 class Gallery
   def initialize(params)
     @file_extention = "*.*"
-     @file_path_to_upload = params['collection_file']
+    @file_path_to_upload = params['collection_file']
     @collection_type = 'collection_file'
     @uploaded_folder = 'file'
     @tempfile = params['collection_file'][:tempfile]

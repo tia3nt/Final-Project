@@ -8,12 +8,11 @@ class Picture_Gallery < Gallery
   end
   def upload
     ('Extention mismatch') unless @collection_type.include? @file_extention
-    file_path_to_upload = "/upload/picture/#{@filename}"
-
     File.new("/picture/#{@filename}", 'wb') do |gallery_file|
       gallery_file.write(@file_to_upload.read)
+      file_path_to_upload = "/upload/picture/#{@filename}"
     end
-    Collection.picture_gallery_setter(file_path_to_upload)
+    file_path_to_upload
   end
   def show
   end
