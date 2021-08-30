@@ -356,6 +356,18 @@ end
           User.get_id_by_name_like(value)
           expect(last_response).to be_ok
         end
+        it 'should let a user to comment on other users post collection' do
+          post "/post/comment/user/4/collection/1"
+          params = {"user_id" => "4",
+            "post_id" => "1",
+            "comment_text" => "Berjuang bersama di #generasiGigih 2021
+            #lampauiBatasMu"}
+          new_comment = Comment.new(params)
+          new_comment.limit
+          post_comment = new_comment.create
+          expect(Mysql2::Result).to be_truthy
+          expect(last_response).to be_ok
+        end
     end
 
 

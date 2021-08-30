@@ -30,6 +30,7 @@ def hashtag_detected_records
   hashtag_splitter.each do |splitted_message|
     next if splitted_message.empty?
     hashtag_end_point = splitted_message.index(" ")
+    hashtag_end_point = @collection_messages.length unless splitted_message.include?(" ")
     splitted_message =  "##{splitted_message[0..hashtag_end_point-1]}"
     splitted_message.chomp!
     splitted_message.chomp!(".")

@@ -42,4 +42,21 @@ class Hashtag
     data = Db_Conn.data_to_object(data)
     data[0]
   end
+  def self.post_comment(comment_id, hashtag_list, timeline)
+    table = 'tbl_hashtag'
+    timestamp = timeline.to_datetime
+    header = ['comment_id', 'hash_text', 'hash_timestamp']
+    return false if hashtag_list.nil?
+    hashtag_list.uniq.each do |list|
+      data = [["#{comment_id}","#{list}","#{timestamp}"]]
+      return false if self.hash_comment_exist?(comment_id, list)
+      Db_Conn.create(table, header, data)
+    end
+  end
+  def self.hash_comment_exist?(comment_id, data)
+    data_checker =  Db_Conn.query_only("
+      SELECT * FROM tbl_hashtag WHERE comment_id = '#{comment_id}'
+      AND LOWER(hash_text) = '#{data.downcase!}'")
+    data_checker.each.nil?
+  end
 end

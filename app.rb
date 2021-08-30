@@ -93,7 +93,11 @@ get "/find/user/search?:name" do
   datas_found.to_json
 end
 
- # post "/collection/:user_id" do
- #    active_user = User.get_by_id(params["user_id"])
- # end
+post "/post/comment/user/:user_id/collection/:collection_id" do
+  content_type :json
+  params.store("post_id", "#{params["collection_id"]}")
+  new_data = Comment.new(params)
+  records = new_data.create
+  records.to_json
+end
 end
