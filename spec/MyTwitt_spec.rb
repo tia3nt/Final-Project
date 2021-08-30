@@ -381,6 +381,11 @@ end
           result = Hashtag.topfive
           expect(last_response).to be_ok
         end
+        it 'should be able to upload media-file gallery after
+        posting a collection' do
+          get "/attach/collection/gallery"
+          expect(last_response).to be_ok
+        end
     end
 
 

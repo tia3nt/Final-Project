@@ -40,15 +40,15 @@ def hashtag_detected_records
   @@hashtag_lists
 end
 
-def self.picture_gallery_setter(filepath)
+def picture_gallery_setter(filepath)
   @collection_picture = filepath
 end
 
-def self.video_gallery_setter(filepath)
+def video_gallery_setter(filepath)
   @collection_video = filepath
 end
 
-def self.file_gallery_setter(filepath)
+def file_gallery_setter(filepath)
   @collection_file = filepath
 end
 
@@ -76,6 +76,17 @@ def create
      @collection_timestamp = new_record["collection_timestamp"]
     Hashtag.post_collection(@collection_id, @@hashtag_lists, @collection_timestamp)
   end
+end
+def update_(gallery_type)
+  gallery_value = {
+    "picture" => @collection_picture,
+    "video"=> @collection_video,
+    "file" => @collection_file
+  }
+  Db_Conn.query_only("
+    UPDATE tbl_collections
+    SET collection_#{gallery_type} = '#{gallery_value[gallery_type]}'
+    WHERE collection_id = '#{@collection_id}'")
 end
 
   def self.get_id_by_parameter(param)
@@ -149,4 +160,13 @@ end
 
   end
 
+def self.last_record
+  rawData = Db_Conn.query_only("
+    SELECT collection_id FROM tbl_collections
+    ORDER BY collection_timestamp DESC LIMIT 1")
+  return ("It's a brand new Collection") if rawData.each.nil?
+  rawObject = Db_Conn.data_to_object(rawData)
+  last_record_data = rawObject[0]
+  last_record_id = last_record_data["collection_id"]
+end
 end

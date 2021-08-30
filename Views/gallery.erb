@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>New Collections Attachment</title>
+  </head>
+  <body>
+    <form
+    class = "Attachment"
+    accept = "image/jpeg image/gif image/x-png image/x-MS-bmp"
+    enctype = "multipart/form-data"
+    action = "/attach/collection/picture/<%= last_collection_id %>"
+    method = "post">
+      <input type="file"
+        name="collection_picture"
+        method="post"
+        value="">
+      <button type="submit" name="image">image</button>
+    </form>
+    <br>
+
+    <form class="Attachment"
+    accept="video/x-mpeg2 video/quicktime video/x-msvideo"
+    enctype = "multipart/form-data"
+    action = "/attach/collection/video/<%= last_collection_id %>"
+    method="post">
+      <input type="file"
+        name="collection_video"
+        value="">
+        <button type="submit" name="video">Video</button>
+    </form>
+    <br>
+    <form class=""
+      enctype = "multipart/form-data"
+      action = "/attach/collection/file/<%= last_collection_id %>"
+      method="post"
+      >
+      <input type="file"
+        name="collection_file"
+        value="">
+        <button type="submit" name="file">file</button>
+    </form>
+  </body>
+</html>
