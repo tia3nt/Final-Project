@@ -7,11 +7,11 @@
   <body>
     <form
     class = "Attachment"
-    accept = "image/jpeg image/gif image/x-png image/x-MS-bmp"
     enctype = "multipart/form-data"
     action = "/attach/collection/picture/<%= last_collection_id %>"
     method = "post">
       <input type="file"
+        accept = "image/jpeg, image/gif, image/x-png, image/x-MS-bm"
         name="collection_picture"
         method="post"
         value="">
@@ -20,11 +20,11 @@
     <br>
 
     <form class="Attachment"
-    accept="video/x-mpeg2 video/quicktime video/x-msvideo"
     enctype = "multipart/form-data"
     action = "/attach/collection/video/<%= last_collection_id %>"
     method="post">
       <input type="file"
+        accept="video/*"
         name="collection_video"
         value="">
         <button type="submit" name="video">Video</button>

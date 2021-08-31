@@ -237,39 +237,7 @@ end
         hashtag_found = collection1.hashtag_detected_records
         expect(hashtag_found).to eq(['#Lorem', '#elementum', '#PorttitorFeugiat'])
       end
-
-      xit 'should be able to upload a picture files' do
-        params = {collection_picture: {filename: "Screenshot_2.png",
-          type: "image/png", name: "collection_picture",
-          tempfile: "#<Tempfile:G:\finalProject\Final-Project\Public\Temp\RackMultipart20210825-11304-13jpafn.png>",
-          head: "Content-Disposition: form-data; name=\"collection_picture\";
-          filename=\"Screenshot_2.png\"\r\nContent-Type: image/png\r\n"}}
-
-        collection1 = Picture_Gallery.new(params)
-        picture_gallery_path = collection1.upload
-        expect(picture_gallery_path).to eq("/upload/picture/Screenshot_2.png")
-      end
-
-      xit 'should be able to upload a video files' do
-
-      end
-
-      xit 'should be able to upload a files' do
-
-      end
-
-      xit 'should be able to create new collections records' do
-        new_message = "Hello #DuniaTanpaBatas"
-        new_image = ''
-      end
-
-      xit 'should be able to view uploaded gallery collection' do
-
-      end
-
-
     end
-
   end
   describe Hashtag do
     context 'when a user create a collection messages, that contain some hashtags' do
@@ -280,13 +248,7 @@ end
         check = Hashtag.hash_collection_exist?(1,'#Lorem')
         expect(check).to be false
       end
-      xit 'should be recorded onto hashtag tables, with its related collection id' do
-        collection_id = 1
-        hashtag_lists = ['#Lorem', '#elementum', '#PorttitorFeugiat']
-        collection_timestamp = Time.now.getutc
-        Hashtag.post_collection(collection_id, hashtag_lists, collection_timestamp)
-        expect(Mysql2::Client).to receive(:query).thrice
-      end
+
     end
   end
 
@@ -385,6 +347,19 @@ end
         posting a collection' do
           get "/attach/collection/gallery"
           expect(last_response).to be_ok
+        end
+        xit 'should be able to save uploaded picture to public folder' do
+          params = {collection_picture: {filename: "Screenshot_2.png",
+            type: "image/png", name: "collection_picture",
+            tempfile: "G:\finalProject\Final-Project\Public\Temp\RackMultipart20210825-11304-13jpafn.png",
+            head: "Content-Disposition: form-data; name=\"collection_picture\";
+            filename=\"Screenshot_2.png\"\r\nContent-Type: image/png\r\n"}}
+
+          post "/attach/collection/picture/1"
+          gallery = Picture_Gallery.new(params)
+          gallery.upload
+          updated_data =Collection.get_by_id(params["collection_id"])
+          expected(updated_data).to include("/upload/picture/")
         end
     end
 

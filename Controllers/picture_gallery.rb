@@ -1,18 +1,22 @@
 class Picture_Gallery < Gallery
   def initialize(params)
     @file_extention = "*.img *.png *.JPEG *.gif *.bmp"
-    @file_to_upload = params[:collection_picture][:tempfile]
-    @filename       = params[:collection_picture][:filename]
     @collection_type = params[:collection_picture][:type]
-    @uploaded_folder = 'picture'
+    @collection_id = params["collection_id"]
+    @filename = params[:collection_picture][:filename]
+    @tempfile = params[:collection_picture][:tempfile]
+    @collection_id = params["collection_id"]
   end
   def upload
-    ('Extention mismatch') unless @collection_type.include? @file_extention
-    File.open("/picture/#{@filename}", 'wb') do |gallery_file|
-      gallery_file.write(@file_to_upload.read)
-      file_path_to_upload = "/upload/picture/#{@filename}"
+  ('Extention mismatch') unless @collection_type.include? @file_extention
+    File.open("./public/upload/picture/#{@filename}","wb") do |f|
+      f.write(@tempfile.read)
     end
-    file_path_to_upload
+    file_path = "/upload/picture/#{@filename}"
+    picture_gallery = Collection.get_by_id(@collection_id)
+    collection = Collection.new(picture_gallery)
+    collection.picture_gallery_setter(file_path)
+    collection.update_("picture")
   end
   def show
   end

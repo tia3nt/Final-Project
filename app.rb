@@ -12,9 +12,7 @@ require_relative './Models/comment'
 require_relative './Models/hashtag'
 require_relative './Controllers/controller_main'
 require_relative './Controllers/control_user'
-require_relative './Controllers/control_collection'
-require_relative './Controllers/control_comment'
-require_relative './Controllers/control_hashtag'
+
 require_relative './Controllers/gallery'
 require_relative './Controllers/picture_gallery'
 require_relative './Controllers/video_gallery'
@@ -121,54 +119,25 @@ end
 
 post "/attach/collection/picture/:collection_id" do
   content_type :json
-
-  @filename = params[:collection_picture][:filename]
-  file = params[:collection_picture][:tempfile]
-  File.open("./public/upload/picture/#{@filename}","wb") do |f|
-    f.write(file.read)
-  end
-  file_path = "/upload/picture/#{@filename}"
-  collection = Collection.get_by_id(params["collection_id"])
-  collection = Collection.new(collection)
-  collection.picture_gallery_setter(file_path)
-  collection.update_("picture")
+  gallery = Picture_Gallery.new(params)
+  gallery.upload
   updated_data = Collection.get_by_id(params["collection_id"])
   updated_data.to_json
 end
 
 post "/attach/collection/video/:collection_id" do
   content_type :json
-
-  @filename = params[:collection_video][:filename]
-  file = params[:collection_video][:tempfile]
-  File.open("./public/upload/video/#{@filename}","wb") do |f|
-    f.write(file.read)
-  end
-  file_path = "/upload/video/#{@filename}"
-  collection = Collection.get_by_id(params["collection_id"])
-  collection = Collection.new(collection)
-  collection.video_gallery_setter(file_path)
-  collection.update_("video")
+  gallery = Video_Gallery.new(params)
+  gallery.upload
   updated_data = Collection.get_by_id(params["collection_id"])
   updated_data.to_json
 end
 
 post "/attach/collection/file/:collection_id" do
   content_type :json
-
-  @filename = params[:collection_file][:filename]
-  file = params[:collection_file][:tempfile]
-  File.open("./public/upload/file/#{@filename}","wb") do |f|
-    f.write(file.read)
-  end
-  file_path = "/upload/file/#{@filename}"
-  collection = Collection.get_by_id(params["collection_id"])
-  collection = Collection.new(collection)
-  collection.picture_gallery_setter(file_path)
-  collection.update_("file")
+  gallery = Gallery.new(params)
+  gallery.upload
   updated_data = Collection.get_by_id(params["collection_id"])
   updated_data.to_json
 end
-
-
 end
