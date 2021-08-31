@@ -6,7 +6,7 @@ branches:
   only: 
     - main
 install:
-  - pip install ansible
+  - "pip install ansible"
 language: python
 python: 
   - "2.7"
