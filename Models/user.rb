@@ -102,9 +102,11 @@ def self.get_id_by_parameter(param)
   user_id = retrieved_data["user_id"]
 end
 def self.get_id_by_name_like(name)
+  name = name.downcase
+  name = "%#{name}%"
   rawData = Db_Conn.query_only("
     SELECT user_id from tbl_user
-    WHERE user_name like '%#{name}%'
+    WHERE user_name like '#{name}'
     ")
     return false if rawData.each.nil?
   id_list = Array.new

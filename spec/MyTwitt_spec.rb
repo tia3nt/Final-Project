@@ -310,7 +310,7 @@ end
           expect(Mysql2::Result).to be_truthy
         end
         it 'should let a user to find other users post collection' do
-          get "/find/user/search?name=cinderella"
+          get "/find/user/name=cinderella"
           key = "user_name"
           value = "cinderella"
           User.get_id_by_name_like(value)

@@ -75,7 +75,7 @@ post '/new/collection/user/:user_id' do
   new_collection.to_json
 end
 
-get "/find/user/search?:name" do
+get "/find/user/:name" do
   content_type :json
   value = params["name"]
   id_list = User.get_id_by_name_like(value)
